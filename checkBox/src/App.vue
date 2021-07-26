@@ -1,38 +1,48 @@
 <template>
   <div>
     <h1>Форма подачи заявки в отдел сервиса и качества</h1>
-
-    <div class="form">
+    <form class="form" action="submit">
       <div>Ваш филиал <span> *</span></div>
-      <select name="" id="">
+      <select required name="" id="">
         <option selected>Выберите город</option>
+
+        <option v-for="city in cities" :key="city">{{ city }}</option>
       </select>
       <div>
         <input type="checkbox" />
         <label for="">Онлайн</label>
       </div>
       <div>
-        Тема обращения <span>*</span>
+        <div>
+          Тема обращения <span>*</span>
+          <div>
+            <input type="checkbox" />
+            <label for="">Недоволен качеством услуг</label>
+          </div>
+        </div>
         <div>
           <input type="checkbox" />
-          <label for="">Недоволен качеством услуг</label>
+          <label for="">Расторжение договора</label>
         </div>
-      </div>
-      <div>
-        <input type="checkbox" />
-        <label for="">Расторжение договора</label>
-      </div>
-      <div>
-        <input type="checkbox" />
-        <label for="">Не приходит письмо активации на почту</label>
-      </div>
-      <div>
-        <input type="checkbox" />
-        <label for="">Не работает личный кабинет</label>
+        <div>
+          <input type="checkbox" />
+          <label for="">Не приходит письмо активации на почту</label>
+        </div>
+        <div>
+          <input type="checkbox" />
+          <label for="">Не работает личный кабинет</label>
+        </div>
       </div>
       <input placeholder="Другое" type="text" />
       <div>Описание проблемы <span>*</span></div>
-      <textarea name="" id="" cols="30" rows="10"></textarea>
+      <textarea
+        style="resize: none"
+        required
+        name=""
+        id=""
+        cols="50"
+        rows="10"
+      ></textarea>
       <div>
         Загрузка документов
         <p>
@@ -41,15 +51,34 @@
         </p>
       </div>
       <input type="file" />
-      <div>
-        <button>Отправить</button>
-      </div>
-    </div>
+      <button @click.prevent="submitHandle()" type="submit">Отправить</button>
+    </form>
   </div>
 </template>
 
-<script setup>
-//
+<script>
+import axios from 'axios';
+export default {
+  data() {
+    return {
+      problem: '',
+      cities: [],
+    };
+  },
+  methods: {
+    submitHandle() {
+      const data = {};
+      axios
+        .get('https://60254fac36244d001797bfe8.mockapi.io/api/v1/city', data)
+        .then((res) => {
+          this.cities.push(...res.data.map((el) => el.title));
+        });
+    },
+  },
+  beforeMount() {
+    this.submitHandle();
+  },
+};
 </script>
 
 <style>
