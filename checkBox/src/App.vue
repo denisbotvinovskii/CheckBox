@@ -15,27 +15,23 @@
         <label for="">Онлайн</label>
       </div>
       <div>
-        <div>
-          Тема обращения <span>*</span>
-          <div>
-            <input @click="problemClear" type="checkbox" />
-            <label for="">Недоволен качеством услуг</label>
-          </div>
-        </div>
-        <div>
-          <input @click="problemClear" type="checkbox" />
-          <label for="">Расторжение договора</label>
-        </div>
-        <div>
-          <input @click="problemClear" type="checkbox" />
-          <label for="">Не приходит письмо активации на почту</label>
-        </div>
-        <div>
-          <input @click="problemClear" type="checkbox" />
-          <label for="">Не работает личный кабинет</label>
+        Тема обращения <span>*</span>
+        <div v-for="(item, index) in items" :key="index">
+          <input
+            @click="problemClear"
+            v-model="item.selected"
+            type="checkbox"
+          />
+          <label>{{ item.label }}</label>
         </div>
       </div>
-      <input @click="checkBoxClear" v-model="problem" placeholder="Другое" type="text" />
+
+      <input
+        @click="clear()"
+        v-model="problem"
+        placeholder="Другое"
+        type="text"
+      />
       <div>Описание проблемы <span>*</span></div>
       <textarea
         style="resize: none"
@@ -67,7 +63,27 @@ export default {
       problemDisabled: false,
       cities: [],
       online: false,
-      checkBox: false,
+      items: [
+        {
+          label: 'Недоволен качеством услуг',
+          selected: false,
+        },
+        {
+          label: 'Расторжение договора',
+          selected: false,
+        },
+        {
+          label: 'Не приходит письмо активации на почту',
+          selected: false,
+        },
+        {
+          label: 'Не работает личный кабинет',
+          selected: false,
+        },
+      ],
+      clear: () => {
+        this.items.forEach((item) => (item.selected = false));
+      },
     };
   },
   methods: {
@@ -88,9 +104,6 @@ export default {
     },
     problemClear() {
       this.problem = '';
-    },
-    checkBoxClear() {
-      this.checkBox = true;
     },
   },
   beforeMount() {
