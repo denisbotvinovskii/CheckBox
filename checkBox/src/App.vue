@@ -51,7 +51,7 @@
         </p>
       </div>
       <input type="file" />
-      <button @click.prevent="submitHandle()" type="submit">Отправить</button>
+      <button type="button" class="btn btn-warning">Отправить</button>
     </form>
   </div>
 </template>
