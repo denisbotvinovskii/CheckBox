@@ -3,13 +3,15 @@
     <h1>Форма подачи заявки в отдел сервиса и качества</h1>
     <form class="form" action="submit">
       <div>Ваш филиал <span> *</span></div>
-      <select required name="" id="">
+      <select v-if="online === false" required name="" id="">
         <option selected>Выберите город</option>
-
         <option v-for="city in cities" :key="city">{{ city }}</option>
       </select>
+      <select v-if="online === true" disabled required name="" id="">
+        <option selected>Выберите город</option>
+      </select>
       <div>
-        <input type="checkbox" />
+        <input @click="onlineHandler" type="checkbox" />
         <label for="">Онлайн</label>
       </div>
       <div>
@@ -51,7 +53,7 @@
         </p>
       </div>
       <input type="file" />
-      <button type="button" class="btn btn-warning">Отправить</button>
+      <button type="submit" class="btn btn-warning">Отправить</button>
     </form>
   </div>
 </template>
@@ -63,6 +65,7 @@ export default {
     return {
       problem: '',
       cities: [],
+      online: false,
     };
   },
   methods: {
@@ -73,6 +76,13 @@ export default {
         .then((res) => {
           this.cities.push(...res.data.map((el) => el.title));
         });
+    },
+    onlineHandler() {
+      if (this.online === false) {
+        return (this.online = true);
+      } else {
+        this.online = false;
+      }
     },
   },
   beforeMount() {
