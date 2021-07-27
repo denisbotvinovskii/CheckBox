@@ -18,24 +18,24 @@
         <div>
           Тема обращения <span>*</span>
           <div>
-            <input type="checkbox" />
+            <input @click="problemClear" type="checkbox" />
             <label for="">Недоволен качеством услуг</label>
           </div>
         </div>
         <div>
-          <input type="checkbox" />
+          <input @click="problemClear" type="checkbox" />
           <label for="">Расторжение договора</label>
         </div>
         <div>
-          <input type="checkbox" />
+          <input @click="problemClear" type="checkbox" />
           <label for="">Не приходит письмо активации на почту</label>
         </div>
         <div>
-          <input type="checkbox" />
+          <input @click="problemClear" type="checkbox" />
           <label for="">Не работает личный кабинет</label>
         </div>
       </div>
-      <input placeholder="Другое" type="text" />
+      <input @click="checkBoxClear" v-model="problem" placeholder="Другое" type="text" />
       <div>Описание проблемы <span>*</span></div>
       <textarea
         style="resize: none"
@@ -64,8 +64,10 @@ export default {
   data() {
     return {
       problem: '',
+      problemDisabled: false,
       cities: [],
       online: false,
+      checkBox: false,
     };
   },
   methods: {
@@ -83,6 +85,12 @@ export default {
       } else {
         this.online = false;
       }
+    },
+    problemClear() {
+      this.problem = '';
+    },
+    checkBoxClear() {
+      this.checkBox = true;
     },
   },
   beforeMount() {
