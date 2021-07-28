@@ -106,9 +106,9 @@ export default {
         )
         .then((res) => {
           if (res.data.success) {
-            alert('ok');
+            document.location.href = 'http://localhost:3000/submit';
           } else {
-            alert('NEIN');
+            alert('Не удалось отправить запрос, повторите попытку позднее');
           }
         });
     },
