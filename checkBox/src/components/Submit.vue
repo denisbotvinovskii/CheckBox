@@ -1,0 +1,9 @@
+<template>
+  <div>
+    <img
+      src="../assets/success_modal.jpg
+"
+      alt=""
+    />
+  </div>
+</template>
