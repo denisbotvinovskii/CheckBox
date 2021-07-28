@@ -1,3 +1,9 @@
 <template>
-  <div>Hello to the fastest</div>
+  <div>
+    <img
+      src="../assets/success_modal.jpg
+"
+      alt=""
+    />
+  </div>
 </template>

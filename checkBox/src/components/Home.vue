@@ -50,7 +50,12 @@
         </p>
       </div>
       <input type="file" />
-      <button @click="btnFinder" type="submit" id="btn" class="btn btn-warning">
+      <button
+        v-on:click.prevent="submitHandler"
+        type="submit"
+        id="btn"
+        class="btn btn-warning"
+      >
         Отправить
       </button>
     </form>
@@ -92,6 +97,21 @@ export default {
     };
   },
   methods: {
+    submitHandler() {
+      let data = {};
+      axios
+        .post(
+          'https://60254fac36244d001797bfe8.mockapi.io/api/v1/send-form',
+          data
+        )
+        .then((res) => {
+          if (res.data.success) {
+            alert('ok');
+          } else {
+            alert('NEIN');
+          }
+        });
+    },
     submitHandle() {
       const data = {};
       axios
@@ -110,33 +130,15 @@ export default {
     problemClear() {
       this.problem = '';
     },
+    buttonActivate() {
+      if (this.text !== '') {
+        return (this.button = true);
+      } else {
+        this.button = false;
+      }
+    },
   },
-  buttonActivate() {
-    if (this.text !== '') {
-      return (this.button = true);
-    } else {
-      this.button = false;
-    }
-  },
-  btnFinder() {
-    let btn = document.querySelector('#btn');
-    console.log(btn);
-    // btn.addEventListener(function (e) {
-    //   e.preventDefault();
-    // });
-  },
-  // submitHandler() {
-  //   console.log('123');
-  //   let data = {};
-  //   axios
-  //     .post(
-  //       'https://60254fac36244d001797bfe8.mockapi.io/api/v1/send-form',
-  //       data
-  //     )
-  //     .then(console.log(res));
 
-  //   console.log(data);
-  // },
   beforeMount() {
     this.submitHandle();
   },
