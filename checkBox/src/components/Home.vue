@@ -130,7 +130,6 @@ export default {
 
       e.preventDefault();
     },
-
     submitHandler() {
       let data = {};
       axios
