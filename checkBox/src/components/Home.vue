@@ -1,15 +1,16 @@
 <template>
   <div>
     <h1>Форма подачи заявки в отдел сервиса и качества</h1>
-    <form class="form" action="submit">
-      <div>Ваш филиал <span> *</span></div>
-      <select v-if="online === false" required name="" id="">
-        <option selected>Выберите город</option>
+
+    <form class="form" @submit="checkForm">
+      <div for="movie">Ваш филиал <span> *</span></div>
+      <select v-model="movie" v-if="online === false" name="movie" id="movie">
         <option v-for="city in cities" :key="city">{{ city }}</option>
       </select>
-      <select v-if="online === true" disabled required name="" id="">
-        <option selected>Выберите город</option>
+      <select v-if="online === true" disabled name="" id="">
+        <option selected>______________</option>
       </select>
+
       <div>
         <input @click="onlineHandler" type="checkbox" />
         <label for="">Онлайн</label>
@@ -17,11 +18,7 @@
       <div>
         Тема обращения <span>*</span>
         <div v-for="(item, index) in items" :key="index">
-          <input
-            @click="problemClear"
-            v-model="item.selected"
-            type="checkbox"
-          />
+          <input @click="clear()" v-model="item.selected" type="checkbox" />
           <label>{{ item.label }}</label>
         </div>
       </div>
@@ -32,16 +29,18 @@
         placeholder="Другое"
         type="text"
       />
-      <div>Описание проблемы <span>*</span></div>
+
+      <div for="name">Описание проблемы <span>*</span></div>
+
       <textarea
         v-model="text"
         style="resize: none"
-        required
-        name=""
-        id=""
+        name="name"
+        id="name"
         cols="50"
         rows="10"
       ></textarea>
+
       <div>
         Загрузка документов
         <p>
@@ -50,8 +49,13 @@
         </p>
       </div>
       <input type="file" />
+      <p v-if="errors.length"></p>
+      <ul>
+        <li v-for="error in errors" :key="error">{{ error }}</li>
+      </ul>
       <button
-        v-on:click.prevent="submitHandler"
+        :disabled="!text.length"
+        v-on:submit.prevent="submitHandler"
         type="submit"
         id="btn"
         class="btn btn-warning"
@@ -67,6 +71,9 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      isDisabled: true,
+      errors: [],
+      movie: null,
       text: '',
       button: false,
       problem: '',
@@ -93,10 +100,33 @@ export default {
       ],
       clear: () => {
         this.items.forEach((item) => (item.selected = false));
+        this.problem = '';
+        if (this.isDisabled === true) {
+          this.isDisabled = false;
+        } else {
+          this.isDisabled = true;
+        }
       },
     };
   },
   methods: {
+    checkForm: function (e) {
+      this.errors = [];
+
+      if (!this.text) {
+        this.errors.push('Введите описание проблемы');
+      }
+      if (!this.movie) {
+        this.errors.push('Выберите филиал');
+      }
+
+      if (!this.errors.length) {
+        return true;
+      }
+
+      e.preventDefault();
+    },
+
     submitHandler() {
       let data = {};
       axios
@@ -106,7 +136,7 @@ export default {
         )
         .then((res) => {
           if (res.data.success) {
-            document.location.href = 'http://localhost:3000/submit';
+            alert('Запрос успешно отправлен');
           } else {
             alert('Не удалось отправить запрос, повторите попытку позднее');
           }
@@ -125,16 +155,6 @@ export default {
         return (this.online = true);
       } else {
         this.online = false;
-      }
-    },
-    problemClear() {
-      this.problem = '';
-    },
-    buttonActivate() {
-      if (this.text !== '') {
-        return (this.button = true);
-      } else {
-        this.button = false;
       }
     },
   },
