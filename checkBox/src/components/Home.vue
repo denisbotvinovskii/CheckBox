@@ -3,8 +3,13 @@
     <h1>Форма подачи заявки в отдел сервиса и качества</h1>
 
     <form class="form" @submit="checkForm">
-      <div for="movie">Ваш филиал <span> *</span></div>
-      <select v-model="movie" v-if="online === false" name="movie" id="movie">
+      <div for="branch">Ваш филиал <span> *</span></div>
+      <select
+        v-model="branch"
+        v-if="online === false"
+        name="branch"
+        id="branch"
+      >
         <option v-for="city in cities" :key="city">{{ city }}</option>
       </select>
       <select v-if="online === true" disabled name="" id="">
@@ -55,8 +60,7 @@
       </ul>
       <button
         :disabled="!text.length"
-        v-on:submit.prevent="submitHandler"
-        type="submit"
+        v-on:click.prevent="submitHandler"
         id="btn"
         class="btn btn-warning"
       >
@@ -73,7 +77,7 @@ export default {
     return {
       isDisabled: true,
       errors: [],
-      movie: null,
+      branch: null,
       text: '',
       button: false,
       problem: '',
@@ -116,7 +120,7 @@ export default {
       if (!this.text) {
         this.errors.push('Введите описание проблемы');
       }
-      if (!this.movie) {
+      if (!this.branch) {
         this.errors.push('Выберите филиал');
       }
 
@@ -126,7 +130,6 @@ export default {
 
       e.preventDefault();
     },
-
     submitHandler() {
       let data = {};
       axios
@@ -136,11 +139,12 @@ export default {
         )
         .then((res) => {
           if (res.data.success) {
-            alert('Запрос успешно отправлен');
+            window.location = '/submit';
           } else {
             alert('Не удалось отправить запрос, повторите попытку позднее');
           }
-        });
+        })
+        .catch((error) => console.log(error));
     },
     submitHandle() {
       const data = {};
